@@ -1,3 +1,6 @@
+# This example is based on this authlib tutorial: 
+# https://github.com/authlib/demo-oauth-client/blob/master/fastapi-google-login/app.py
+
 import json
 from fastapi import FastAPI
 from starlette.config import Config
@@ -13,21 +16,12 @@ if ENV_FILE:
     load_dotenv(ENV_FILE)
 
 app = FastAPI()
-# app.add_middleware(SessionMiddleware, secret_key="!secret")
 app.add_middleware(SessionMiddleware, secret_key=env.get("APP_SECRET_KEY"))
 
-# config = Config('.env')
+# config = Config('.env') # TODO: get config to work
 config = Config()
 oauth = OAuth(config)
 
-# CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
-# oauth.register(
-#     name='google',
-#     server_metadata_url=CONF_URL,
-#     client_kwargs={
-#         'scope': 'openid email profile'
-#     }
-# )
 
 CONF_URL = server_metadata_url=f'https://{env.get("AUTH0_DOMAIN")}/.well-known/openid-configuration'
 oauth.register(
